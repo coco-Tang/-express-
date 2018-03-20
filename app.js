@@ -4,6 +4,16 @@ var app = express();
 app.use(require("body-parser").urlencoded({ extended: false }));
 
 
+app.get('/api/getnavlsit', function(req, res) {
+    res.setHeader('Access-Control-Alow-Origin', '*');
+    var result = {
+        'data': [
+            'yi','er','san','si'
+        ]
+    }
+    res.send(result);
+})
+
 app.get('/api/getpaginatorlist', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     var result = {
@@ -370,6 +380,28 @@ app.get('/api/getfilelist', function (req, res) {
         ]
     }
 
+    res.send(result);
+})
+
+app.get('/api/tablelist', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    var result = {
+        "result": [
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60},
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60},
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60},
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60},
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60},
+            {"name": "aaa","age": 18, "gender": "male", "height": 180, "weight": 55},
+            {"name": "bbb","age": 15, "gender": "female", "height": 170, "weight": 60}
+        ]
+        
+    }
     res.send(result);
 })
 

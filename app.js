@@ -1,11 +1,19 @@
 var express = require("express");
 var app = express();
-
+var cors = require("cors");
 app.use(require("body-parser").urlencoded({ extended: false }));
+app.use(cors({
+    credentials: true,
+    origin: "http://127.0.0.1:5500"
+}))
 
+app.get('/api/voicetest', function(req,res){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.send('http://192.168.1.56:8080/voiceprint_ide/localvoice/20180411094806/%E6%88%98%E6%96%97%E5%A3%B0%E7%BA%B9.wav')
+})
 
 app.get('/api/getnavlsit', function(req, res) {
-    res.setHeader('Access-Control-Alow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Origin', '192.168.1.69');
     var result = {
         'data': [
             'yi','er','san','si'

@@ -1,12 +1,80 @@
 var express = require("express");
 var app = express();
 var cors = require("cors");
+var fs = require("fs");
+var path = require("path");
+var session = require('express-session');
+
+// 使用 session 中间件
+app.use(session({
+    secret :  'secret', // 对session id 相关的cookie 进行签名
+    resave : true,
+    saveUninitialized: false, // 是否保存未初始化的会话
+    cookie : {
+        maxAge : 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+    },
+}));
+
 app.use(require("body-parser").urlencoded({ extended: false }));
 app.use(cors({
     credentials: true,
     origin: "http://127.0.0.1:5500"
 }))
 
+// 用户登录
+app.post('api/login', function(req, res){
+    if(req.body.username == 'admin' && req.body.pwd == 'admin123'){
+        req.session.userName = req.body.username; // 登录成功，设置 session
+        res.redirect('/');
+    }
+    else{
+        res.json({ret_code : 1, ret_msg : '账号或密码错误'});// 若登录失败，重定向到登录页面
+    }
+});
+
+app.get('/api/mychart/:id',function(req,res){
+    var id = req.query;
+    console.log(id);
+    var result = {
+        'data': [1,5,10,6,id]
+    };
+    // switch (id) {
+    //     case 0 : 
+    //     result = {
+    //         'data': [1,5,10,6]
+    //     };
+    //     break;
+    //     case 1 : 
+    //     result = {
+    //         'data': [9,10,87,289]
+    //     };
+    //     break;
+    //     case 2 : 
+    //     result = {
+    //         'data': [90,38,178,78]
+    //     };
+    //     break;
+    // }
+    // res.send(result);
+})
+
+app.get('/api/play',function(req,res){
+    fs.readFile(path.join(__dirname,"陈硕琦-G-1.wav"),function(err,data){
+        res.send(data);
+    })
+})
+app.get('/api/validator/taskname',function(req,res){
+    var result = {
+        'data': ["老大的语音","老二的语音","老三的语音"]
+    }
+    res.send(result);
+})
+app.get('/api/loading',function(req,res){
+    var result = {
+        success: '成功'
+    }
+    res.send(result)
+})
 app.get('/api/voicetest', function(req,res){
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send('http://192.168.1.56:8080/voiceprint_ide/localvoice/20180411094806/%E6%88%98%E6%96%97%E5%A3%B0%E7%BA%B9.wav')
@@ -306,6 +374,7 @@ app.get("/api/getaudiopath", function (req, res) {
 
 app.get('/api/geteletestlist', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
+    
     var result = {
         "result": [{
             date: '2016-05-02',
@@ -325,8 +394,10 @@ app.get('/api/geteletestlist', function (req, res) {
             address: '上海市普陀区金沙江路 1516 弄'
           }]
     }
-
-    res.send(result);
+    setTimeout(function(){
+        res.send(result);
+        
+    },1000)
 })
 
 app.get('/api/getvoicelist', function (req, res) {
@@ -413,6 +484,6 @@ app.get('/api/tablelist', function (req, res) {
     res.send(result);
 })
 
-app.listen(9000, function () {
-    console.log("http://localhost:9000");
+app.listen(10001, function () {
+    console.log("http://localhost:10001");
 })
